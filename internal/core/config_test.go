@@ -5,10 +5,9 @@ import (
 	"testing"
 
 	"github.com/bear-jordan/envy/internal/testutils"
-	"github.com/goccy/go-yaml"
 )
 
-func configYml() string {
+func configFixtureYml() string {
 	return `
 %YAML 1.2
 ---
@@ -27,9 +26,9 @@ projects:
 }
 
 func configFixture() *Config {
-	var config Config
-	yml := configYml()
-	if err := yaml.Unmarshal([]byte(yml), &config); err != nil {
+	specification := configFixtureYml()
+	config, err := UnmarshalYml(specification)
+	if err != nil {
 		log.Fatalf("unmarshal error: %v", err)
 	}
 
@@ -94,4 +93,11 @@ func TestSetCurrentProject(t *testing.T) {
 		testutils.AssertError(t, err)
 
 	})
+}
+
+func TestUnmarshalSpecification(t *testing.T) {
+	t.Run("test unmarshalling a valid string", func(t *testing.T) {})
+	t.Run("test unmarshalling an invalid string", func(t *testing.T) {})
+	t.Run("test unmarshalling a valid path", func(t *testing.T) {})
+	t.Run("test unmarshalling an invalid path", func(t *testing.T) {})
 }
