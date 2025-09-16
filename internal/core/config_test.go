@@ -26,30 +26,6 @@ projects:
 `
 }
 
-func projectYml() string {
-	return `
-%YAML 1.2
----
-description: Example Project 2
-backend: aws_ssm
-environments:
-    - name: prod
-      position: 1
-      prefix: /prod/envy
-`
-
-}
-
-func projectFixture() *Project {
-	var project Project
-	yml := projectYml()
-	if err := yaml.Unmarshal([]byte(yml), &project); err != nil {
-		log.Fatalf("unmarshal error: %v", err)
-	}
-
-	return &project
-}
-
 func configFixture() *Config {
 	var config Config
 	yml := configYml()

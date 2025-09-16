@@ -5,6 +5,22 @@ import (
 	"testing"
 )
 
+func AssertType(t testing.TB, got any, want any) {
+	t.Helper()
+
+	if reflect.TypeOf(got) != reflect.TypeOf(want) {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
+func AssertEqual(t testing.TB, got any, want any) {
+	t.Helper()
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
 func AssertDeepEqual(t testing.TB, got any, want any) {
 	t.Helper()
 
