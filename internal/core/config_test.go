@@ -78,24 +78,3 @@ func TestAddProject(t *testing.T) {
 	})
 
 }
-
-// func TestConfig(t *testing.T) {
-//  pathTestConfigs := []struct {
-//      message string
-//      name    ConfigPath
-//      want    string
-//  }{
-//      {"test path projects", PathProjects, ""},
-//      {"test path backend", PathBackend, ""},
-//      {"test path name", PathName, ""},
-//      {"test environment prefix", PathEnvironmentPrefix, ""},
-//      {"test environment position", PathEnvironmentPosition, ""},
-//      {"test environment name", PathEnvironmentName, ""},
-//  }
-//  for _, tc := range pathTestConfigs {
-//      t.Run(tc.message, func(t *testing.T) {
-//          config.SetValue(tc.name, tc.want)
-//          testutils.AssertDeepEqual(t, got, tc.want)
-//      })
-//  }
-// }
