@@ -31,17 +31,6 @@ projects:
 ```
 */
 
-type ConfigPath string
-
-const (
-	PathProjects            ConfigPath = "projects"
-	PathBackend             ConfigPath = "backend"
-	PathDescription         ConfigPath = "description"
-	PathEnvironmentPrefix   ConfigPath = "environments.%s.prefix"
-	PathEnvironmentPosition ConfigPath = "environments.%s.position"
-	PathEnvironmentName     ConfigPath = "environments.%s.name"
-)
-
 type Environment struct {
 	EnvironmentName string `yaml:"name"`
 	DisplayPosition int    `yaml:"position"`
@@ -59,6 +48,7 @@ type Config struct {
 	Projects       map[string]Project `yaml:"projects"`
 }
 
+// Add a project to a config
 func (c *Config) AddProject(id string, project Project) error {
 	_, ok := c.Projects[id]
 	if ok {
@@ -67,4 +57,26 @@ func (c *Config) AddProject(id string, project Project) error {
 	c.Projects[id] = project
 
 	return nil
+}
+
+// Remove a project from the config
+func (c *Config) RemoveProject(id string) error {
+	_, ok := c.Projects[id]
+	if ok {
+		delete(c.Projects, id)
+		return nil
+	}
+
+	return errors.New("ID does not exist.")
+}
+
+// Set the current project
+func (c *Config) SetCurrentProject(id string) error {
+	_, ok := c.Projects[id]
+	if ok {
+		c.CurrentProject = id
+		return nil
+	}
+
+	return errors.New("ID does not exist.")
 }

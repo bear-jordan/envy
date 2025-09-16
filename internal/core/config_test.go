@@ -13,7 +13,7 @@ func configYml() string {
 %YAML 1.2
 ---
 projects:
-    example_project_1:
+    project_1:
         description: Example Project
         backend: aws_ssm
         environments:
@@ -77,4 +77,45 @@ func TestAddProject(t *testing.T) {
 		testutils.AssertError(t, err)
 	})
 
+}
+
+func TestRemoveProject(t *testing.T) {
+	t.Run("test removing a valid project", func(t *testing.T) {
+		config := configFixture()
+
+		err := config.RemoveProject("project_1")
+		testutils.AssertNoError(t, err)
+	})
+	t.Run("test removing an invalid project", func(t *testing.T) {
+		config := configFixture()
+
+		err := config.RemoveProject("should_fail")
+		testutils.AssertError(t, err)
+	})
+}
+
+func TestSetCurrentProject(t *testing.T) {
+	t.Run("test set valid project", func(t *testing.T) {
+		// Setup config
+		config := configFixture()
+		project := projectFixture()
+		err := config.AddProject("project_2", *project)
+		testutils.AssertNoError(t, err)
+
+		// Set project
+		err = config.SetCurrentProject("project_2")
+		testutils.AssertNoError(t, err)
+	})
+	t.Run("test set invalid project", func(t *testing.T) {
+		// Setup config
+		config := configFixture()
+		project := projectFixture()
+		err := config.AddProject("project_2", *project)
+		testutils.AssertNoError(t, err)
+
+		// Set project
+		err = config.SetCurrentProject("should_fail")
+		testutils.AssertError(t, err)
+
+	})
 }
