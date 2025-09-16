@@ -14,7 +14,7 @@ func configFixtureYml() string {
 projects:
     project_1:
         description: Example Project
-        backend: aws_ssm
+        backend_type: mock
         environments:
             - name: prod
               position: 1
@@ -32,7 +32,7 @@ func configFixture() *Config {
 		log.Fatalf("unmarshal error: %v", err)
 	}
 
-	return &config
+	return config
 }
 
 func TestAddProject(t *testing.T) {

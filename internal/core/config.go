@@ -12,13 +12,19 @@ type Config struct {
 	Projects       map[string]Project `yaml:"projects"`
 }
 
-func UnmarshalYml(specification string) (Config, error) {
+func UnmarshalYml(specification string) (*Config, error) {
 	var config Config
 	err := yaml.Unmarshal([]byte(specification), &config)
 	if err != nil {
-		log.Fatalf("Cannot unmarshal specification.")
+		log.Fatalf("Cannot unmarshal specification. %v", err)
 	}
-	return config, nil
+	for _, project := range config.Projects {
+		project.BackendProvider, err = BackendProviderFactory(project.BackendProviderType)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return &config, nil
 }
 
 // Add a project to a config
