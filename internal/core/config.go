@@ -1,7 +1,7 @@
 package core
 
 import (
-	"sync"
+	"errors"
 )
 
 /*
@@ -16,7 +16,7 @@ Requirements:
 ```yml
 projects:
 	example_project:
-		name: Example Project
+		description: Example Project
 		backend: aws_ssm
 		environments:
 			- name: prod
@@ -33,6 +33,15 @@ projects:
 
 type ConfigPath string
 
+const (
+	PathProjects            ConfigPath = "projects"
+	PathBackend             ConfigPath = "backend"
+	PathDescription         ConfigPath = "description"
+	PathEnvironmentPrefix   ConfigPath = "environments.%s.prefix"
+	PathEnvironmentPosition ConfigPath = "environments.%s.position"
+	PathEnvironmentName     ConfigPath = "environments.%s.name"
+)
+
 type Environment struct {
 	EnvironmentName string `yaml:"name"`
 	DisplayPosition int    `yaml:"position"`
@@ -40,13 +49,22 @@ type Environment struct {
 }
 
 type Project struct {
-	ProjectName     string        `yaml:"name"`
-	BackendProvider string        `yaml:"backend"`
-	Environments    []Environment `yaml:"environments"`
+	ProjectDescription string        `yaml:"description"`
+	BackendProvider    string        `yaml:"backend"`
+	Environments       []Environment `yaml:"environments"`
 }
 
 type Config struct {
-	Mu             sync.RWMutex
 	CurrentProject string
 	Projects       map[string]Project `yaml:"projects"`
+}
+
+func (c *Config) AddProject(id string, project Project) error {
+	_, ok := c.Projects[id]
+	if ok {
+		return errors.New("Unable to add project.")
+	}
+	c.Projects[id] = project
+
+	return nil
 }
